@@ -1,4 +1,4 @@
-package com.example;
+package edu.utsa.cs3443.hot_wheel;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class App extends Application {
+public class GameStartApp extends Application {
 
     private static Scene scene;
 
@@ -25,7 +25,7 @@ public class App extends Application {
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(GameStartApp.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
 

@@ -1,4 +1,4 @@
-package com.example;
+package edu.utsa.cs3443.hot_wheel;
 
 import javafx.fxml.FXML;
 
