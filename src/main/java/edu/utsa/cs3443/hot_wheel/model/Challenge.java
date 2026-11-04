@@ -5,12 +5,18 @@ public class Challenge {
     private double startingMoney;
     private boolean isCompleted;
 
+    public Challenge (double targetMoney, double startingMoney, boolean isCompleted) {
+        this.targetMoney = targetMoney;
+        this.startingMoney = startingMoney;
+        this.isCompleted = isCompleted;
+    }
+
     public void startChallenge(double currentMoney) {
         //Creates the challenge with the given value as the startingMoney
     }
 
     public void updateChallenge(double newTargetMoney) {
-        //creates an updated/higher targetMoney value as the game progresses
+        //creates a new targetMoney value from given value as the game progresses
     }
 
     public boolean isChallengeCompleted(double currentMoney) {
@@ -25,9 +31,21 @@ public class Challenge {
     }
 
 
+
     public double getMoneyEarned(double currentMoney) {
         //Returns how much money was made during the challenge
         return currentMoney - startingMoney;
     }
 
+    public double getTargetMoney() {
+        return targetMoney;
+    }
+
+    public double getStartingMoney() {
+        return startingMoney;
+    }
+
+    public boolean isCompleted() {
+         return isCompleted;
+    }
 }
