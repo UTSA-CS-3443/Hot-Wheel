@@ -1,3 +1,0 @@
-Money:260.0
-Prestige:0
-TimeRemaining:291.0
