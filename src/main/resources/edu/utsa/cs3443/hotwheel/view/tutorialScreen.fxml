@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="edu.utsa.cs3443.hotwheel.controller.TutorialController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+    </padding>
+
+    <Label text="📖 Hot Wheel Tutorial 📖" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #ff4500;"/>
+
+    <Label fx:id="tutorialTextLabel" text="Loading tutorial..." wrapText="true" textAlignment="CENTER" style="-fx-font-size: 14px;" prefWidth="320.0" prefHeight="80.0"/>
+
+    <HBox alignment="CENTER" spacing="15.0">
+        <Button fx:id="backButton" text="Back" onAction="#onBackClick" prefWidth="90.0"/>
+        <Button fx:id="nextButton" text="Next" onAction="#onNextClick" prefWidth="90.0"/>
+    </HBox>
+
+    <Button text="Home" onAction="#onHomeClick" prefWidth="195.0" style="-fx-base: #dddddd;"/>
+</VBox>
