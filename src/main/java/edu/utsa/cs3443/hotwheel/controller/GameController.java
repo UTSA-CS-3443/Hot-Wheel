@@ -19,12 +19,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameController {
+
+    private static final double INITIAL_RUN_SECONDS = 300.0;
 
     private GameManager gameManager;
     private SaveFileManager saveFileManager;
@@ -33,6 +36,8 @@ public class GameController {
     private double currentWheelAngle = 0;
     private List<WheelSegment> currentSegments;
     private Pane wheelPane;
+    private Label centerTimerLabel;
+    private Arc timerRing;
 
     // Tracks active spin and run states so UI controls lock cleanly without manual setDisable calls
     private final BooleanProperty wheelSpinning = new SimpleBooleanProperty(false);
@@ -69,7 +74,7 @@ public class GameController {
 
         Wheel wheel = new Wheel(currentSegments, 1.5, 1.0);
 
-        GameState state = new GameState("Slot" + currentSlot, wheel, 0.0, 300.0);
+        GameState state = new GameState("Slot" + currentSlot, wheel, 0.0, INITIAL_RUN_SECONDS);
         saveFileManager.loadGame(currentSlot, state);
 
         gameManager = new GameManager(state);
@@ -129,7 +134,47 @@ public class GameController {
             startAngle += arcLength;
         }
 
-        wheelContainer.getChildren().add(wheelPane);
+        // Outer draining ring around the edge of the 220x220 wheel (center 110, 110; wheel radius is 100)
+        timerRing = new Arc(110, 110, 106, 106, 90, 360);
+        timerRing.setType(ArcType.OPEN);
+        timerRing.setFill(Color.TRANSPARENT);
+        timerRing.setStroke(Color.GOLD);
+        timerRing.setStrokeWidth(4);
+        timerRing.setMouseTransparent(true);
+
+        // Lowered pointer arrow sitting right above the top rim
+        Polygon pointerArrow = new Polygon(
+                110.0, 14.0,
+                100.0, -4.0,
+                120.0, -4.0
+        );
+        pointerArrow.setFill(Color.CRIMSON);
+        pointerArrow.setStroke(Color.GOLD);
+        pointerArrow.setStrokeWidth(1.5);
+        pointerArrow.setMouseTransparent(true);
+
+        Pane overlayPane = new Pane(timerRing, pointerArrow);
+        overlayPane.setPrefSize(220, 220);
+        overlayPane.setMinSize(220, 220);
+        overlayPane.setMaxSize(220, 220);
+        overlayPane.setMouseTransparent(true);
+
+        // Dark pill/box behind the center timer readout so it stays legible over any segment color
+        centerTimerLabel = new Label("300s");
+        centerTimerLabel.setStyle(
+                "-fx-background-color: rgba(11, 23, 18, 0.90);" +
+                        "-fx-text-fill: #FFF8DC;" +
+                        "-fx-font-weight: bold;" +
+                        "-fx-font-size: 13px;" +
+                        "-fx-padding: 5 9 5 9;" +
+                        "-fx-background-radius: 999;" +
+                        "-fx-border-color: #d4af37;" +
+                        "-fx-border-width: 1.5;" +
+                        "-fx-border-radius: 999;"
+        );
+        centerTimerLabel.setMouseTransparent(true);
+
+        wheelContainer.getChildren().addAll(wheelPane, overlayPane, centerTimerLabel);
     }
 
     private void startRunTimer() {
@@ -211,9 +256,20 @@ public class GameController {
 
     private void updateUI() {
         GameState state = gameManager.getGameState();
+        double timeLeft = Math.max(0.0, state.getTimeRemaining());
+
         if (moneyLabel != null) moneyLabel.setText(String.format("Money: $%.2f", state.getMoney()));
-        if (timerLabel != null) timerLabel.setText(String.format("Time Left: %.0fs", state.getTimeRemaining()));
-        if (prestigeLabel != null) prestigeLabel.setText("Prestige Points: " + state.getPrestigePoints());
+        if (timerLabel != null) timerLabel.setText(String.format("Time Left: %.0fs", timeLeft));
+        if (prestigeLabel != null) prestigeLabel.setText("Prestige Pts.: " + state.getPrestigePoints());
+
+        if (centerTimerLabel != null) {
+            centerTimerLabel.setText(String.format("%.0fs", timeLeft));
+        }
+        if (timerRing != null) {
+            double ratio = Math.min(1.0, timeLeft / INITIAL_RUN_SECONDS);
+            timerRing.setLength(-360.0 * ratio);
+        }
+
         if (shopPaneController != null) shopPaneController.refreshShop();
     }
 }

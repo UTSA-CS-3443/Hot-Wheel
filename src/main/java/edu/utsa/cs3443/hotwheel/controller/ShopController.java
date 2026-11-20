@@ -133,7 +133,7 @@ public class ShopController {
     }
 
     private VBox buildUpgradeCard(Upgrade upgrade, double currentMoney, int currentPrestige) {
-        VBox card = new VBox(6);
+        VBox card = new VBox(8);
         card.getStyleClass().add("upgrade-card");
 
         HBox headerRow = new HBox(8);
@@ -141,32 +141,12 @@ public class ShopController {
 
         Label titleLabel = new Label(upgrade.getName() + " (Lv. " + upgrade.getLevel() + ")");
         titleLabel.getStyleClass().add("upgrade-title");
+        titleLabel.setWrapText(true);
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         headerRow.getChildren().addAll(titleLabel, spacer);
-
-        double moneyCost = upgrade.getCostMoney();
-        int prestigeCost = upgrade.getCostPrestige();
-
-        if (moneyCost > 0) {
-            Button moneyBuyButton = new Button(String.format("Buy ($%.0f)", moneyCost));
-            moneyBuyButton.getStyleClass().add("casino-buy-btn");
-            boolean canAffordMoney = gameState != null && currentMoney >= moneyCost;
-            moneyBuyButton.setDisable(!canAffordMoney);
-            moneyBuyButton.setOnAction(e -> handleBuyWithMoney(upgrade));
-            headerRow.getChildren().add(moneyBuyButton);
-        }
-
-        if (prestigeCost > 0) {
-            Button prestigeBuyButton = new Button("Buy (" + prestigeCost + " Prestige)");
-            prestigeBuyButton.getStyleClass().add("casino-buy-btn");
-            boolean canAffordPrestige = gameState != null && currentPrestige >= prestigeCost;
-            prestigeBuyButton.setDisable(!canAffordPrestige);
-            prestigeBuyButton.setOnAction(e -> handleBuyWithPrestige(upgrade));
-            headerRow.getChildren().add(prestigeBuyButton);
-        }
 
         Label descLabel = new Label(upgrade.getDescription());
         descLabel.setWrapText(true);
@@ -192,6 +172,44 @@ public class ShopController {
 
             selectorRow.getChildren().addAll(pickerLabel, segmentPicker);
             card.getChildren().add(selectorRow);
+        }
+
+        HBox buttonRow = new HBox(8);
+        buttonRow.setAlignment(Pos.CENTER_RIGHT);
+
+        double moneyCost = upgrade.getCostMoney();
+        int prestigeCost = upgrade.getCostPrestige();
+
+        if (moneyCost > 0) {
+            Button moneyBuyButton = new Button(String.format("$%.2f", moneyCost));
+            moneyBuyButton.getStyleClass().add("casino-buy-btn");
+            moneyBuyButton.setMinHeight(36);
+            moneyBuyButton.setPrefHeight(36);
+            moneyBuyButton.setMinWidth(Button.USE_PREF_SIZE);
+            moneyBuyButton.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(moneyBuyButton, Priority.ALWAYS);
+            boolean canAffordMoney = gameState != null && currentMoney >= moneyCost;
+            moneyBuyButton.setDisable(!canAffordMoney);
+            moneyBuyButton.setOnAction(e -> handleBuyWithMoney(upgrade));
+            buttonRow.getChildren().add(moneyBuyButton);
+        }
+
+        if (prestigeCost > 0) {
+            Button prestigeBuyButton = new Button(prestigeCost + " Prestige");
+            prestigeBuyButton.getStyleClass().add("casino-buy-btn");
+            prestigeBuyButton.setMinHeight(36);
+            prestigeBuyButton.setPrefHeight(36);
+            prestigeBuyButton.setMinWidth(Button.USE_PREF_SIZE);
+            prestigeBuyButton.setMaxWidth(Double.MAX_VALUE);
+            HBox.setHgrow(prestigeBuyButton, Priority.ALWAYS);
+            boolean canAffordPrestige = gameState != null && currentPrestige >= prestigeCost;
+            prestigeBuyButton.setDisable(!canAffordPrestige);
+            prestigeBuyButton.setOnAction(e -> handleBuyWithPrestige(upgrade));
+            buttonRow.getChildren().add(prestigeBuyButton);
+        }
+
+        if (!buttonRow.getChildren().isEmpty()) {
+            card.getChildren().add(buttonRow);
         }
 
         return card;

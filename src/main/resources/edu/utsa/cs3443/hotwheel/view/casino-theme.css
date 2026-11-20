@@ -45,6 +45,12 @@
     -fx-font-size: 28px;
 }
 
+.wheel-center-timer {
+    -fx-text-fill: #fff8dc;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
 .action-feed {
     -fx-text-fill: #e8f5ee;
     -fx-font-size: 15px;
@@ -208,7 +214,9 @@
 .casino-buy-btn {
     -fx-background-color: #d4af37;
     -fx-text-fill: #0b1712;
+    -fx-font-size: 13px;
     -fx-font-weight: bold;
+    -fx-padding: 9 14 9 14;
     -fx-background-radius: 5;
     -fx-cursor: hand;
 }

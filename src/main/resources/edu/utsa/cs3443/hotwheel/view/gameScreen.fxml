@@ -16,7 +16,7 @@
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="edu.utsa.cs3443.hotwheel.controller.GameController">
 
-    <!-- Top HUD: Save navigation, Money, Prestige, Timer -->
+    <!-- Top HUD: Save navigation, Money, Prestige -->
     <top>
         <HBox alignment="CENTER_LEFT" spacing="24.0" styleClass="casino-hud">
             <padding>
@@ -26,11 +26,9 @@
             <Button text="Back to Saves" onAction="#onBackToSaveClick" styleClass="casino-secondary-btn"/>
 
             <Label fx:id="moneyLabel" text="Money: $0.00" styleClass="hud-money"/>
-            <Label fx:id="prestigeLabel" text="Prestige Points: 0" styleClass="hud-prestige"/>
+            <Label fx:id="prestigeLabel" text="Prestige Pts.: 0" styleClass="hud-prestige"/>
 
             <Region HBox.hgrow="ALWAYS"/>
-
-            <Label fx:id="timerLabel" text="Time Left: 300s" styleClass="hud-timer"/>
         </HBox>
     </top>
 
@@ -41,11 +39,8 @@
                 <Insets top="24.0" right="24.0" bottom="24.0" left="24.0"/>
             </padding>
 
-            <!-- Top pointer indicator above the wheel -->
-            <Label text="▼" styleClass="wheel-pointer"/>
-
             <StackPane fx:id="wheelContainer" VBox.vgrow="ALWAYS" maxWidth="Infinity" maxHeight="Infinity">
-                <!-- GameController.drawVisualWheel(...) injects wheelPane here -->
+                <!-- GameController.drawVisualWheel(...) injects wheelPane, timer ring, center timer, and lowered pointer here -->
             </StackPane>
 
             <Button fx:id="spinButton" text="SPIN WHEEL" onAction="#onSpinClick" styleClass="casino-spin-btn"/>
