@@ -4,22 +4,37 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="edu.utsa.cs3443.hotwheel.controller.TutorialController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<StackPane prefHeight="720.0" prefWidth="1280.0"
+           styleClass="casino-felt-bg"
+           stylesheets="@casino-theme.css"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="edu.utsa.cs3443.hotwheel.controller.TutorialController">
 
-    <Label text="📖 Hot Wheel Tutorial 📖" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #ff4500;"/>
+    <VBox alignment="CENTER" spacing="22.0" maxWidth="680.0" styleClass="casino-card-panel">
+        <padding>
+            <Insets top="36.0" right="40.0" bottom="36.0" left="40.0"/>
+        </padding>
 
-    <Label fx:id="tutorialTextLabel" text="Loading tutorial..." wrapText="true" textAlignment="CENTER" style="-fx-font-size: 14px;" prefWidth="320.0" prefHeight="80.0"/>
+        <Label text="HOW TO PLAY" styleClass="screen-title"/>
 
-    <HBox alignment="CENTER" spacing="15.0">
-        <Button fx:id="backButton" text="Back" onAction="#onBackClick" prefWidth="90.0"/>
-        <Button fx:id="nextButton" text="Next" onAction="#onNextClick" prefWidth="90.0"/>
-    </HBox>
+        <Label fx:id="tutorialTextLabel"
+               text="Loading tutorial..."
+               wrapText="true"
+               textAlignment="CENTER"
+               maxWidth="Infinity"
+               minHeight="130.0"
+               prefHeight="150.0"
+               styleClass="tutorial-body"/>
 
-    <Button text="Home" onAction="#onHomeClick" prefWidth="195.0" style="-fx-base: #dddddd;"/>
-</VBox>
+        <HBox alignment="CENTER" spacing="18.0">
+            <Button fx:id="backButton" text="Back" onAction="#onBackClick" prefWidth="130.0" prefHeight="40.0" styleClass="casino-secondary-btn"/>
+            <Button fx:id="nextButton" text="Next" onAction="#onNextClick" prefWidth="130.0" prefHeight="40.0" styleClass="casino-spin-btn"/>
+        </HBox>
+
+        <Button text="Home" onAction="#onHomeClick" prefWidth="278.0" prefHeight="40.0" styleClass="casino-secondary-btn"/>
+    </VBox>
+
+</StackPane>

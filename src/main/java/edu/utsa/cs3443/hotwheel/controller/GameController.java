@@ -9,6 +9,8 @@ import edu.utsa.cs3443.hotwheel.model.WheelSegment;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,6 +34,10 @@ public class GameController {
     private List<WheelSegment> currentSegments;
     private Pane wheelPane;
 
+    // Tracks active spin and run states so UI controls lock cleanly without manual setDisable calls
+    private final BooleanProperty wheelSpinning = new SimpleBooleanProperty(false);
+    private final BooleanProperty runActive = new SimpleBooleanProperty(true);
+
     @FXML
     private Label moneyLabel;
     @FXML
@@ -44,6 +50,10 @@ public class GameController {
     private StackPane wheelContainer;
     @FXML
     private Button spinButton;
+
+    // Matches <fx:id="shopPane" source="ShopPane.fxml"/> in the game FXML
+    @FXML
+    private ShopController shopPaneController;
 
     @FXML
     public void initialize() {
@@ -59,11 +69,26 @@ public class GameController {
 
         Wheel wheel = new Wheel(currentSegments, 1.5, 1.0);
 
-        GameState state = new GameState("Slot" + currentSlot, wheel, 100.0, 300.0);
+        GameState state = new GameState("Slot" + currentSlot, wheel, 0.0, 300.0);
         saveFileManager.loadGame(currentSlot, state);
 
         gameManager = new GameManager(state);
         gameManager.startRun();
+        runActive.set(gameManager.isRunning());
+
+        if (spinButton != null) {
+            spinButton.disableProperty().bind(wheelSpinning.or(runActive.not()));
+        }
+
+        if (shopPaneController != null) {
+            shopPaneController.initShop(gameManager.getGameState(), wheelSpinning, () -> {
+                updateUI();
+                saveCurrentProgress();
+                if (actionFeedLabel != null) {
+                    actionFeedLabel.setText("Purchased an upgrade!");
+                }
+            });
+        }
 
         drawVisualWheel(currentSegments);
         updateUI();
@@ -112,9 +137,11 @@ public class GameController {
             gameManager.updateTimer(1.0);
             updateUI();
             if (!gameManager.isRunning()) {
+                runActive.set(false);
                 gameTimer.stop();
-                actionFeedLabel.setText("Run Ended! Time is up.");
-                if (spinButton != null) spinButton.setDisable(true);
+                if (actionFeedLabel != null) {
+                    actionFeedLabel.setText("Run Ended! Time is up.");
+                }
                 saveCurrentProgress();
             }
         }));
@@ -124,8 +151,9 @@ public class GameController {
 
     @FXML
     protected void onSpinClick() {
-        if (!gameManager.isRunning() || wheelPane == null) return;
-        if (spinButton != null) spinButton.setDisable(true);
+        if (!gameManager.isRunning() || wheelPane == null || wheelSpinning.get()) return;
+
+        wheelSpinning.set(true);
 
         WheelSegment landed = gameManager.getGameState().getWheel().spin();
         if (landed != null) {
@@ -147,15 +175,24 @@ public class GameController {
                 currentWheelAngle = targetAngle % 360;
                 double earned = landed.getValue() * gameManager.getGameState().getWheel().getMoneyMultiplier();
                 gameManager.getGameState().addMoney(earned);
-                actionFeedLabel.setText("Landed on " + landed.getLabel() + " ($" + landed.getValue() + ")! Earned $" + earned);
+                if (actionFeedLabel != null) {
+                    actionFeedLabel.setText(String.format(
+                            "Landed on %s ($%.2f)! Earned $%.2f",
+                            landed.getLabel(),
+                            landed.getValue(),
+                            earned
+                    ));
+                }
+
+                wheelSpinning.set(false);
+                runActive.set(gameManager.isRunning());
                 updateUI();
                 saveCurrentProgress();
-
-                if (spinButton != null && gameManager.isRunning()) {
-                    spinButton.setDisable(false);
-                }
             });
             rotator.play();
+        } else {
+            wheelSpinning.set(false);
+            runActive.set(gameManager.isRunning());
         }
     }
 
@@ -176,6 +213,7 @@ public class GameController {
         GameState state = gameManager.getGameState();
         if (moneyLabel != null) moneyLabel.setText(String.format("Money: $%.2f", state.getMoney()));
         if (timerLabel != null) timerLabel.setText(String.format("Time Left: %.0fs", state.getTimeRemaining()));
-        if (prestigeLabel != null) prestigeLabel.setText("Prestige: " + state.getPrestigePoints());
+        if (prestigeLabel != null) prestigeLabel.setText("Prestige Points: " + state.getPrestigePoints());
+        if (shopPaneController != null) shopPaneController.refreshShop();
     }
 }

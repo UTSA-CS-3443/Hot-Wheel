@@ -3,17 +3,30 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="edu.utsa.cs3443.hotwheel.controller.StartController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<StackPane prefHeight="720.0" prefWidth="1280.0"
+           styleClass="casino-felt-bg"
+           stylesheets="@casino-theme.css"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="edu.utsa.cs3443.hotwheel.controller.StartController">
 
-    <Label text="🔥 Hot Wheel 🔥" style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #ff4500;"/>
-    <Label text="Team Critical Hit Project" style="-fx-font-size: 14px; -fx-text-fill: #666666;"/>
+    <VBox alignment="CENTER" spacing="22.0" maxWidth="580.0" styleClass="casino-card-panel">
+        <padding>
+            <Insets top="40.0" right="44.0" bottom="40.0" left="44.0"/>
+        </padding>
 
-    <Button text="Start Game" onAction="#onStartGameClick" prefWidth="160.0" style="-fx-font-size: 14px;"/>
-    <Button text="Tutorial" onAction="#onTutorialClick" prefWidth="160.0" style="-fx-font-size: 14px;"/>
-</VBox>
+        <Label text="HOT WHEEL" styleClass="screen-title"/>
+        <Label text="HOW MUCH CAN YOU SPIN?" styleClass="screen-subtitle"/>
+
+        <VBox alignment="CENTER" spacing="14.0" fillWidth="true" maxWidth="280.0">
+            <padding>
+                <Insets top="10.0"/>
+            </padding>
+            <Button text="Start Game" onAction="#onStartGameClick" maxWidth="Infinity" prefHeight="48.0" styleClass="casino-spin-btn"/>
+            <Button text="Tutorial" onAction="#onTutorialClick" maxWidth="Infinity" prefHeight="42.0" styleClass="casino-secondary-btn"/>
+        </VBox>
+    </VBox>
+
+</StackPane>

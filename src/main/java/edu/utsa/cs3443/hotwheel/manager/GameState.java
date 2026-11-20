@@ -33,4 +33,12 @@ public class GameState {
     public Wheel getWheel() { return wheel; }
     public double getTimeRemaining() { return timeRemaining; }
     public void setTimeRemaining(double timeRemaining) { this.timeRemaining = timeRemaining; }
+
+    public boolean spendMoney(double amount) {
+        if (amount < 0 || this.money < amount) {
+            return false;
+        }
+        this.money -= amount;
+        return true;
+    }
 }
