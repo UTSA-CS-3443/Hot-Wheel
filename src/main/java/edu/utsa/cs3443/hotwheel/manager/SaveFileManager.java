@@ -38,7 +38,15 @@ public class SaveFileManager {
                 } else if (line.startsWith("Prestige:")) {
                     gameState.setPrestigePoints(Integer.parseInt(line.substring("Prestige:".length())));
                 } else if (line.startsWith("TimeRemaining:")) {
-                    gameState.setTimeRemaining(Double.parseDouble(line.substring("TimeRemaining:".length())));
+                    double timeRemaining = Double.parseDouble(line.substring("TimeRemaining:".length()));
+                    if(timeRemaining <= 0)
+                    {
+                        gameState.setTimeRemaining(300);
+                    }
+                    else
+                    {
+                        gameState.setTimeRemaining(timeRemaining);
+                    }
                 }
             }
         } catch (Exception e) {

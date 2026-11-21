@@ -1,11 +1,14 @@
 package edu.utsa.cs3443.hotwheel.manager;
 
+import edu.utsa.cs3443.hotwheel.model.Challenge;
 import edu.utsa.cs3443.hotwheel.model.Wheel;
 
 public class GameState {
     private String activeSaveFile;
     private Wheel wheel;
+    private Challenge challenge;
     private double money;
+    private double revenue;
     private int prestigePoints;
     private double timeRemaining;
 
@@ -16,13 +19,32 @@ public class GameState {
         this.prestigePoints = 0;
         this.timeRemaining = timeRemaining;
     }
+    public GameState(String activeSaveFile, Wheel wheel, double startingMoney, double timeRemaining, Challenge challenge) {
+        this.activeSaveFile = activeSaveFile;
+        this.wheel = wheel;
+        this.money = startingMoney;
+        this.prestigePoints = 0;
+        this.timeRemaining = timeRemaining;
+        this.challenge = challenge;
+    }
 
     public void addMoney(double amount) {
         this.money += amount;
+        revenue += amount;
+        System.out.println("revenue: " + revenue);
+        if(amount >= 0)
+        {
+            int wins = challenge.checkCompletion(revenue);
+            if(wins > 0)
+            {
+                addPrestigePoint(wins);
+                revenue = challenge.getRemainingMoney();
+            }
+        }
     }
 
-    public void addPrestigePoint() {
-        this.prestigePoints++;
+    public void addPrestigePoint(int amount) {
+        prestigePoints += amount;
     }
 
     // Getters and Setters
