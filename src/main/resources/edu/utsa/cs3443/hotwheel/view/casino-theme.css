@@ -1,0 +1,230 @@
+/* =========================================
+   Casino Felt Background & Shared Panels
+   ========================================= */
+.casino-felt-bg {
+    -fx-background-color: radial-gradient(center 50% 45%, radius 80%, #165639, #092418);
+}
+
+.casino-card-panel {
+    -fx-background-color: rgba(11, 23, 18, 0.94);
+    -fx-border-color: #d4af37;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+}
+
+/* =========================================
+   Top HUD Bar & Wheel Stage
+   ========================================= */
+.casino-hud {
+    -fx-background-color: #0b1712;
+    -fx-border-color: #d4af37;
+    -fx-border-width: 0 0 2 0;
+}
+
+.hud-money {
+    -fx-text-fill: #f5d061;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.hud-prestige {
+    -fx-text-fill: #9be7ff;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.hud-timer {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.wheel-pointer {
+    -fx-text-fill: #f5d061;
+    -fx-font-size: 28px;
+}
+
+.wheel-center-timer {
+    -fx-text-fill: #fff8dc;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.action-feed {
+    -fx-text-fill: #e8f5ee;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-color: rgba(11, 23, 18, 0.78);
+    -fx-padding: 10 18 10 18;
+    -fx-background-radius: 6;
+    -fx-border-color: rgba(212, 175, 55, 0.45);
+    -fx-border-radius: 6;
+}
+
+/* =========================================
+   Screen Typography & Tutorial Box
+   ========================================= */
+.screen-title {
+    -fx-text-fill: #f5d061;
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+}
+
+.screen-subtitle {
+    -fx-text-fill: #b7d1c3;
+    -fx-font-size: 14px;
+}
+
+.slot-status-label {
+    -fx-text-fill: #e8f5ee;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+}
+
+.tutorial-body {
+    -fx-text-fill: #edf7f1;
+    -fx-font-size: 16px;
+    -fx-background-color: #12261d;
+    -fx-padding: 18;
+    -fx-background-radius: 8;
+    -fx-border-color: rgba(212, 175, 55, 0.45);
+    -fx-border-radius: 8;
+}
+
+/* =========================================
+   Buttons & Save Slots
+   ========================================= */
+.casino-spin-btn {
+    -fx-background-color: linear-gradient(to bottom, #f5d061, #b88b1e);
+    -fx-text-fill: #0b1712;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 36 12 36;
+    -fx-background-radius: 8;
+    -fx-border-color: #fff0b3;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-cursor: hand;
+}
+
+.casino-spin-btn:hover {
+    -fx-background-color: linear-gradient(to bottom, #ffe07d, #cca029);
+}
+
+.casino-spin-btn:disabled {
+    -fx-opacity: 0.45;
+}
+
+.casino-secondary-btn {
+    -fx-background-color: #172e24;
+    -fx-text-fill: #e6f2ec;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 7 14 7 14;
+    -fx-background-radius: 6;
+    -fx-border-color: #8c6d1f;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.casino-secondary-btn:hover {
+    -fx-background-color: #203f32;
+}
+
+.slot-btn {
+    -fx-background-color: #173025;
+    -fx-text-fill: #f5d061;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-color: #9e7b24;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.slot-btn:hover {
+    -fx-background-color: #214535;
+}
+
+.casino-danger-btn {
+    -fx-background-color: #5c1d24;
+    -fx-text-fill: #ffd6db;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 6;
+    -fx-border-color: #b84a56;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+
+.casino-danger-btn:hover {
+    -fx-background-color: #75252e;
+}
+
+/* =========================================
+   Right Shop Dock & Upgrade Cards
+   ========================================= */
+.shop-panel {
+    -fx-background-color: rgba(11, 23, 18, 0.94);
+    -fx-border-color: #d4af37;
+    -fx-border-width: 0 0 0 2;
+}
+
+.shop-panel:disabled {
+    -fx-opacity: 0.55;
+}
+
+.shop-title {
+    -fx-text-fill: #f5d061;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.shop-status {
+    -fx-text-fill: #a7c4b5;
+    -fx-font-size: 12px;
+}
+
+.shop-scroll,
+.shop-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.upgrade-card {
+    -fx-background-color: #142b21;
+    -fx-border-color: #9e7b24;
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 12;
+}
+
+.upgrade-title {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.upgrade-desc {
+    -fx-text-fill: #c6dbd0;
+    -fx-font-size: 12px;
+}
+
+.casino-buy-btn {
+    -fx-background-color: #d4af37;
+    -fx-text-fill: #0b1712;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 9 14 9 14;
+    -fx-background-radius: 5;
+    -fx-cursor: hand;
+}
+
+.casino-buy-btn:hover {
+    -fx-background-color: #e6c34d;
+}
+
+.casino-buy-btn:disabled {
+    -fx-opacity: 0.45;
+}

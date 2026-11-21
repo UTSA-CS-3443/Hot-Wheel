@@ -62,7 +62,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>edu.utsa.cs3443.hotwheel/edu.utsa.cs3443.hotwheel.HelloApplication</mainClass>
+                            <mainClass>edu.utsa.cs3443.hotwheel/edu.utsa.cs3443.hotwheel.GameStartApp</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

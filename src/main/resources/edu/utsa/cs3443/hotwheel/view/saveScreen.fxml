@@ -4,25 +4,49 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="15.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="edu.utsa.cs3443.hotwheel.controller.SaveController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<StackPane prefHeight="720.0" prefWidth="1280.0"
+           styleClass="casino-felt-bg"
+           stylesheets="@casino-theme.css"
+           xmlns:fx="http://javafx.com/fxml"
+           fx:controller="edu.utsa.cs3443.hotwheel.controller.SaveController">
 
-    <Label text="💾 Select Save Slot 💾" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #ff4500;"/>
+    <VBox alignment="CENTER" spacing="16.0" maxWidth="540.0" styleClass="casino-card-panel">
+        <padding>
+            <Insets top="28.0" right="36.0" bottom="28.0" left="36.0"/>
+        </padding>
 
-    <HBox alignment="CENTER" spacing="10.0">
-        <Button text="Slot 1" onAction="#onSelectSlot1" prefWidth="80.0"/>
-        <Button text="Slot 2" onAction="#onSelectSlot2" prefWidth="80.0"/>
-        <Button text="Slot 3" onAction="#onSelectSlot3" prefWidth="80.0"/>
-    </HBox>
+        <Label text="SELECT SAVE SLOT" styleClass="screen-title"/>
+        <Label text="Choose a save file to play, inspect stats, or delete" styleClass="screen-subtitle"/>
 
-    <Label fx:id="slotStatusLabel" text="Selected Slot: 1" style="-fx-font-size: 14px;"/>
+        <HBox alignment="CENTER" spacing="14.0">
+            <Button text="Slot 1" onAction="#onSelectSlot1" prefWidth="120.0" prefHeight="42.0" styleClass="slot-btn"/>
+            <Button text="Slot 2" onAction="#onSelectSlot2" prefWidth="120.0" prefHeight="42.0" styleClass="slot-btn"/>
+            <Button text="Slot 3" onAction="#onSelectSlot3" prefWidth="120.0" prefHeight="42.0" styleClass="slot-btn"/>
+        </HBox>
 
-    <Button text="Play / Load" onAction="#onPlayClick" prefWidth="180.0" style="-fx-base: #90ee90;"/>
-    <Button text="Delete Save" onAction="#onDeleteClick" prefWidth="180.0" style="-fx-base: #ffcccb;"/>
-    <Button text="Back" onAction="#onBackClick" prefWidth="180.0" style="-fx-base: #dddddd;"/>
-</VBox>
+        <Label fx:id="slotStatusLabel" text="Selected Slot: 1" styleClass="slot-status-label"/>
+
+        <VBox fx:id="statsBox" spacing="4.0" visible="false" managed="false" styleClass="tutorial-body">
+            <Label fx:id="statsSlotLabel" text="Slot Stats" styleClass="slot-status-label"/>
+            <Label fx:id="statsMoneyLabel" text="Money: $0.00" styleClass="upgrade-desc"/>
+            <Label fx:id="statsPrestigeLabel" text="Prestige Pts.: 0" styleClass="upgrade-desc"/>
+            <Label fx:id="statsTimeLabel" text="Time Remaining: 300s" styleClass="upgrade-desc"/>
+            <Label fx:id="statsWheelLabel" text="Wheel Multiplier: 1.00x" styleClass="upgrade-desc"/>
+        </VBox>
+
+        <VBox alignment="CENTER" spacing="12.0" fillWidth="true" maxWidth="300.0">
+            <HBox spacing="10.0" alignment="CENTER">
+                <Button text="Play" onAction="#onPlaySlotClick" maxWidth="Infinity" prefHeight="40.0"
+                        HBox.hgrow="ALWAYS" styleClass="slot-btn"/>
+                <Button text="Stats" onAction="#onStatsSlotClick" maxWidth="Infinity" prefHeight="40.0"
+                        HBox.hgrow="ALWAYS" styleClass="casino-secondary-btn"/>
+            </HBox>
+            <Button text="Delete Save" onAction="#onDeleteClick" maxWidth="Infinity" prefHeight="40.0" styleClass="casino-danger-btn"/>
+            <Button text="Back" onAction="#onBackClick" maxWidth="Infinity" prefHeight="40.0" styleClass="casino-secondary-btn"/>
+        </VBox>
+    </VBox>
+
+</StackPane>

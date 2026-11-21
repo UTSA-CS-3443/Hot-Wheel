@@ -18,9 +18,9 @@ public class TutorialController {
 
     private int currentIndex = 0;
     private final String[] tutorialSteps = {
-            "Step 1: Spin the wheel to earn money, boost multipliers, and expand high-value segments!",
-            "Step 2: Spend your earnings in the shop on powerful, permanent upgrades to scale faster.",
-            "Step 3: Meet the target money condition within the 5-minute run time to win prestige points and beat the challenge!"
+            "Spin the wheel to earn money, simple as that! The more valuable your segment, the more money you get! How much can YOU get in 5 minutes?",
+            "30-second challenges will appear, giving you a chance to earn prestige points. Spend prestige points or money to unlock powerful, permanent upgrades that will help you climb.",
+            "Once your 5 minutes are up, the wheel will no longer spin. You can delete the current save or try again in a different save slot for a chance to earn more!"
     };
 
     @FXML
