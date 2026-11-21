@@ -4,6 +4,7 @@ import edu.utsa.cs3443.hotwheel.manager.GameManager;
 import edu.utsa.cs3443.hotwheel.manager.GameState;
 import edu.utsa.cs3443.hotwheel.manager.SaveFileManager;
 import edu.utsa.cs3443.hotwheel.manager.SceneManager;
+import edu.utsa.cs3443.hotwheel.model.Challenge;
 import edu.utsa.cs3443.hotwheel.model.Wheel;
 import edu.utsa.cs3443.hotwheel.model.WheelSegment;
 import javafx.animation.KeyFrame;
@@ -73,8 +74,8 @@ public class GameController {
         currentSegments.add(new WheelSegment(10.0, 500.0, "Platinum"));
 
         Wheel wheel = new Wheel(currentSegments, 1.5, 1.0);
-
-        GameState state = new GameState("Slot" + currentSlot, wheel, 0.0, INITIAL_RUN_SECONDS);
+        Challenge challenge = new Challenge(400, 400, 2, 1);
+        GameState state = new GameState("Slot" + currentSlot, wheel, 0.0, INITIAL_RUN_SECONDS, challenge);
         saveFileManager.loadGame(currentSlot, state);
 
         gameManager = new GameManager(state);
@@ -219,16 +220,17 @@ public class GameController {
             rotator.setOnFinished(e -> {
                 currentWheelAngle = targetAngle % 360;
                 double earned = landed.getValue() * gameManager.getGameState().getWheel().getMoneyMultiplier();
-                gameManager.getGameState().addMoney(earned);
-                if (actionFeedLabel != null) {
-                    actionFeedLabel.setText(String.format(
-                            "Landed on %s ($%.2f)! Earned $%.2f",
-                            landed.getLabel(),
-                            landed.getValue(),
-                            earned
-                    ));
+                if (gameManager.isRunning()) {
+                    gameManager.getGameState().addMoney(earned);
+                    if (actionFeedLabel != null) {
+                        actionFeedLabel.setText(String.format(
+                                "Landed on %s ($%.2f)! Earned $%.2f",
+                                landed.getLabel(),
+                                landed.getValue(),
+                                earned
+                        ));
                 }
-
+                }
                 wheelSpinning.set(false);
                 runActive.set(gameManager.isRunning());
                 updateUI();
