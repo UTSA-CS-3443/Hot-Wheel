@@ -31,7 +31,6 @@ public class GameState {
     public void addMoney(double amount) {
         this.money += amount;
         revenue += amount;
-        System.out.println("revenue: " + revenue);
         if(amount >= 0)
         {
             int wins = challenge.checkCompletion(revenue);
