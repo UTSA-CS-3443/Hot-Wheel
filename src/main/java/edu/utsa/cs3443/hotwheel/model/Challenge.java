@@ -9,8 +9,8 @@ public class Challenge {
     private double challengeLevel;
     private double remainingMoney;
 
-    public Challenge(double targetMoney, double defaultValue, double challengeMultiplier, double challengeLevel) {
-        this.targetMoney = targetMoney;
+    public Challenge(double defaultValue, double challengeMultiplier, double challengeLevel) {
+        targetMoney = updateTargetMoney();
         this.defaultValue = defaultValue;
         this.challengeMultiplier = challengeMultiplier;
         this.challengeLevel = challengeLevel;
