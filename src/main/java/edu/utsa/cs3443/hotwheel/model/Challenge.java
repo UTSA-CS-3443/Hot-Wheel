@@ -17,7 +17,7 @@ public class Challenge {
     }
 
     public void updateTargetMoney() {
-        targetMoney = defaultValue * challengeMultiplier * (challengeLevel-1);
+        targetMoney = Math.round((defaultValue + challengeMultiplier * (challengeLevel - 1)) / 50.0) * 50.0;
     }
     public int checkCompletion(double amount) {
         int wins = 0;
