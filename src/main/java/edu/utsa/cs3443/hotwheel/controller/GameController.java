@@ -74,7 +74,7 @@ public class GameController {
         currentSegments.add(new WheelSegment(20.0, 150.0, "Gold"));
         currentSegments.add(new WheelSegment(10.0, 500.0, "Platinum"));
 
-        Wheel wheel = new Wheel(currentSegments, 1.5, 1.0);
+        Wheel wheel = new Wheel(currentSegments, 5.0, 1.0);
         Challenge challenge = new Challenge(400, 150, 1);
         GameState state = new GameState("Slot" + currentSlot, wheel, 0.0, INITIAL_RUN_SECONDS, challenge);
         saveFileManager.loadGame(currentSlot, state);

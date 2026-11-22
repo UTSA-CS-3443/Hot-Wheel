@@ -61,7 +61,19 @@ public class ShopController {
             int targetLevel = savedLevels.getOrDefault(upgrade.getType(), 1);
             while (upgrade.getLevel() < targetLevel) {
                 if (gameState != null && gameState.getWheel() != null) {
-                    upgrade.applyUpgrade(gameState.getWheel());
+                    Wheel wheel = gameState.getWheel();
+                    WheelSegment targetSegment = null;
+
+                    if (upgrade.getType() == UpgradeType.SEGMENT_SIZE) {
+                        for (WheelSegment seg : wheel.getSegments()) {
+                            if (seg.getLabel().equals(selectedSegmentLabel)) {
+                                targetSegment = seg;
+                                break;
+                            }
+                        }
+                    }
+
+                    upgrade.applyUpgrade(wheel, targetSegment);
                 }
                 upgrade.increaseLevel();
             }
