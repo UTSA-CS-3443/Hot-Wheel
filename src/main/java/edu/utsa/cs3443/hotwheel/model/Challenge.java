@@ -24,8 +24,8 @@ public class Challenge {
             while(amount >= targetMoney)
             {
                 amount -= targetMoney;
-                updateTargetMoney();
                 challengeLevel++;
+                updateTargetMoney();
                 wins++;
             }
         remainingMoney = amount;
