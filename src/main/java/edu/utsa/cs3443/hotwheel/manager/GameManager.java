@@ -16,15 +16,33 @@ public class GameManager {
         this.isRunning = true;
     }
 
-    public void spinWheel() {
-        if (!isRunning) return;
+
+    public WheelSegment spinWheel(double finalRotation) {
+        if (!isRunning) return null;
+
         Wheel wheel = gameState.getWheel();
-        WheelSegment landedSegment = wheel.spin();
+
+        WheelSegment landedSegment =
+                wheel.getLandedSegment(finalRotation);
+
         if (landedSegment != null) {
-            double earned = landedSegment.getValue() * wheel.getMoneyMultiplier();
+            double earned = landedSegment.getValue()
+                    * wheel.getMoneyMultiplier();
+
             gameState.addMoney(earned);
         }
+
+        return landedSegment;
     }
+
+
+    public void upgradeSegmentSize(WheelSegment segment, double amount) {
+        if (!isRunning) return;
+
+        gameState.getWheel().increaseSegmentSize(segment, amount);
+    }
+
+
 
     public void updateTimer(double deltaSeconds) {
         if (!isRunning) return;

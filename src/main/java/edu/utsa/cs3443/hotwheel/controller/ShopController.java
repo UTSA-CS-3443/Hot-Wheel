@@ -15,6 +15,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import edu.utsa.cs3443.hotwheel.model.Wheel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -252,12 +253,34 @@ public class ShopController {
     }
 
     private void applyPurchasedUpgrade(Upgrade upgrade) {
-        if (gameState.getWheel() != null) {
-            upgrade.applyUpgrade(gameState.getWheel());
+        if (gameState == null || gameState.getWheel() == null) {
+            return;
         }
+
+        Wheel wheel = gameState.getWheel();
+        WheelSegment selectedSegment = null;
+
+        if (upgrade.getType() == UpgradeType.SEGMENT_SIZE) {
+            for (WheelSegment segment : wheel.getSegments()) {
+                if (segment.getLabel().equals(selectedSegmentLabel)) {
+                    selectedSegment = segment;
+                    break;
+                }
+            }
+
+            if (selectedSegment == null) {
+                if (statusLabel != null) {
+                    statusLabel.setText("Invalid wheel segment selected.");
+                }
+                return;
+            }
+        }
+
+        upgrade.applyUpgrade(wheel, selectedSegment);
         upgrade.increaseLevel();
 
         refreshShop();
+
         if (onAfterPurchase != null) {
             onAfterPurchase.run();
         }
