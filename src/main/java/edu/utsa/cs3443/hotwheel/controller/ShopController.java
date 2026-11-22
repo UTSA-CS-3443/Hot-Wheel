@@ -17,7 +17,9 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class ShopController {
 
@@ -49,6 +51,27 @@ public class ShopController {
         refreshShop();
     }
 
+    public void applySavedLevels(Map<UpgradeType, Integer> savedLevels) {
+        if (savedLevels == null || savedLevels.isEmpty()) {
+            return;
+        }
+
+        for (Upgrade upgrade : upgrades) {
+            int targetLevel = savedLevels.getOrDefault(upgrade.getType(), 1);
+            while (upgrade.getLevel() < targetLevel) {
+                if (gameState != null && gameState.getWheel() != null) {
+                    upgrade.applyUpgrade(gameState.getWheel());
+                }
+                upgrade.increaseLevel();
+            }
+        }
+        refreshShop();
+    }
+
+    public List<Upgrade> getUpgrades() {
+        return Collections.unmodifiableList(upgrades);
+    }
+
     private void syncSegmentChoices() {
         if (gameState != null && gameState.getWheel() != null && gameState.getWheel().getSegments() != null) {
             List<WheelSegment> segments = gameState.getWheel().getSegments();
@@ -62,16 +85,6 @@ public class ShopController {
         }
     }
 
-    /**
-     * Four core upgrades:
-     * 1. Additive money bonus (PAYOUT_BOOST)
-     * 2. Multiplicative money bonus (MONEY_MULTIPLIER)
-     * 3. Wheel segment size increase with chosen segment (SEGMENT_SIZE)
-     * 4. Wheel cooldown decrease (SPIN_DURATION)
-     *
-     * Any Upgrade with costPrestige > 0 automatically gets a Prestige purchase button
-     * in buildUpgradeCard(...).
-     */
     private void loadDefaultUpgrades() {
         upgrades.clear();
         upgrades.add(new Upgrade(
