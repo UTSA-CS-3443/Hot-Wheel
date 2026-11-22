@@ -89,8 +89,12 @@ public class GameController {
 
         if (shopPaneController != null) {
             shopPaneController.initShop(gameManager.getGameState(), wheelSpinning, () -> {
+
+                drawVisualWheel(gameManager.getGameState().getWheel().getSegments());
+
                 updateUI();
                 saveCurrentProgress();
+
                 if (actionFeedLabel != null) {
                     actionFeedLabel.setText("Purchased an upgrade!");
                 }
@@ -110,17 +114,35 @@ public class GameController {
     }
 
     private void drawVisualWheel(List<WheelSegment> segments) {
-        if (wheelContainer == null || segments == null || segments.isEmpty()) return;
+        if (wheelContainer == null || segments == null || segments.isEmpty()) {
+            return;
+        }
+
+        // Preserve the wheel's rotation when redrawing
+        double previousRotation = wheelPane == null
+                ? currentWheelAngle
+                : wheelPane.getRotate();
+
         wheelContainer.getChildren().clear();
 
         wheelPane = new Pane();
         wheelPane.setPrefSize(220, 220);
         wheelPane.setMinSize(220, 220);
         wheelPane.setMaxSize(220, 220);
+        wheelPane.setRotate(previousRotation);
 
-        double arcLength = 360.0 / segments.size();
-        // Offset start angle so segment 0 is centered at the top pointer (90 degrees)
-        double startAngle = 90 - (arcLength / 2.0);
+        // Calculate the total size of every segment
+        double totalSize = 0;
+
+        for (WheelSegment segment : segments) {
+            totalSize += segment.getSize();
+        }
+
+        if (totalSize <= 0) {
+            return;
+        }
+
+        double startAngle = 90;
 
         // Explicit color mapping matching each metal
         Color[] metalColors = {
@@ -133,14 +155,22 @@ public class GameController {
         for (int i = 0; i < segments.size(); i++) {
             WheelSegment seg = segments.get(i);
 
-            Arc arc = new Arc(110, 110, 100, 100, startAngle, arcLength);
+            // Each arc occupies a proportion of the full circle
+            double arcLength = 360.0 * seg.getSize() / totalSize;
+
+            Arc arc = new Arc(
+                    110, 110, 100, 100,
+                    startAngle, -arcLength
+            );
+
             arc.setType(ArcType.ROUND);
             arc.setFill(metalColors[i % metalColors.length]);
             arc.setStroke(Color.BLACK);
             arc.setStrokeWidth(2);
 
             wheelPane.getChildren().add(arc);
-            startAngle += arcLength;
+
+            startAngle -= arcLength;
         }
 
         // Outer draining ring around the edge of the 220x220 wheel (center 110, 110; wheel radius is 100)
@@ -203,53 +233,73 @@ public class GameController {
         gameTimer.play();
     }
 
+
     @FXML
     protected void onSpinClick() {
-        if (!gameManager.isRunning() || wheelPane == null || wheelSpinning.get()) return;
+        // Prevent spinning if the run is over or already spinning
+        if (!gameManager.isRunning() || wheelPane == null || wheelSpinning.get()) {
+            return;
+        }
 
+        // Lock spin button and shop during animation
         wheelSpinning.set(true);
 
-        WheelSegment landed = gameManager.getGameState().getWheel().spin();
-        if (landed != null) {
-            int landedIndex = currentSegments.indexOf(landed);
-            if (landedIndex == -1) landedIndex = 0;
+        Wheel wheel = gameManager.getGameState().getWheel();
 
-            double arcLength = 360.0 / currentSegments.size();
+        // Start from the wheel's current rotation
+        double startingAngle = wheelPane.getRotate();
 
-            // Perfect forward rotation math to align the winning slice directly with the top pointer
-            double targetSegmentAngle = landedIndex * arcLength;
-            double forwardOffset = (360 - targetSegmentAngle - (currentWheelAngle % 360) + 360) % 360;
-            double fullSpins = 1440; // 4 full rotations for spin inertia
-            double targetAngle = currentWheelAngle + fullSpins + forwardOffset;
+        // Random final rotation, independent of segment count
+        double randomAngle = Math.random() * 360;
+        double fullSpins = 360 * 4;
 
-            RotateTransition rotator = new RotateTransition(Duration.seconds(1.5), wheelPane);
-            rotator.setFromAngle(currentWheelAngle);
-            rotator.setToAngle(targetAngle);
-            rotator.setOnFinished(e -> {
-                currentWheelAngle = targetAngle % 360;
-                double earned = landed.getValue() * gameManager.getGameState().getWheel().getMoneyMultiplier();
-                if (gameManager.isRunning()) {
-                    gameManager.getGameState().addMoney(earned);
-                    if (actionFeedLabel != null) {
-                        actionFeedLabel.setText(String.format(
-                                "Landed on %s ($%.2f)! Earned $%.2f",
-                                landed.getLabel(),
-                                landed.getValue(),
-                                earned
-                        ));
-                    }
+        double targetAngle = startingAngle + fullSpins + randomAngle;
+
+        // Use the upgraded spin duration
+        RotateTransition rotator = new RotateTransition(
+                Duration.seconds(wheel.getSpinDuration()),
+                wheelPane
+        );
+
+        rotator.setFromAngle(startingAngle);
+        rotator.setToAngle(targetAngle);
+
+        rotator.setOnFinished(e -> {
+            // Keep rotation within 0-360 degrees
+            currentWheelAngle = targetAngle % 360;
+            wheelPane.setRotate(currentWheelAngle);
+
+            // Determine the winning segment from final rotation
+            WheelSegment landed = gameManager.spinWheel(targetAngle);
+
+            if (landed != null) {
+                // GameManager already added the earned money
+                double earned = landed.getValue()
+                        * wheel.getMoneyMultiplier();
+
+                if (actionFeedLabel != null) {
+                    actionFeedLabel.setText(
+                            String.format(
+                                    "Landed on %s ($%.2f)! Earned $%.2f",
+                                    landed.getLabel(),
+                                    landed.getValue(),
+                                    earned
+                            )
+                    );
                 }
-                wheelSpinning.set(false);
-                runActive.set(gameManager.isRunning());
-                updateUI();
-                saveCurrentProgress();
-            });
-            rotator.play();
-        } else {
+            }
+
+            // Unlock controls and refresh the interface
             wheelSpinning.set(false);
             runActive.set(gameManager.isRunning());
-        }
+
+            updateUI();
+            saveCurrentProgress();
+        });
+
+        rotator.play();
     }
+
 
     @FXML
     protected void onBackToSaveClick() {

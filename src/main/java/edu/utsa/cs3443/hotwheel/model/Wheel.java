@@ -1,6 +1,11 @@
 package edu.utsa.cs3443.hotwheel.model;
 
 import java.util.List;
+import java.util.Random;
+import javafx.animation.Interpolator;
+import javafx.animation.RotateTransition;
+import javafx.scene.Node;
+import javafx.util.Duration;
 
 public class Wheel {
     private List<WheelSegment> segments;
@@ -13,12 +18,6 @@ public class Wheel {
         this.moneyMultiplier = moneyMultiplier;
     }
 
-    public WheelSegment spin() {
-        if (segments.isEmpty()) return null;
-        int index = (int) (Math.random() * segments.size());
-        return segments.get(index);
-    }
-
     public void increasePayouts(double amount) {
         this.moneyMultiplier += amount;
     }
@@ -27,10 +26,43 @@ public class Wheel {
         this.spinDuration = Math.max(0.5, this.spinDuration - amount);
     }
 
-    public void increaseGreatSegmentSize(double amount) {
-        if (!segments.isEmpty()) {
-            segments.get(0).setSize(segments.get(0).getSize() + amount);
+
+    public void increaseSegmentSize(WheelSegment segment, double amount) {
+        if (segment == null || !segments.contains(segment) || amount <= 0) {
+            return;
         }
+
+        segment.setSize(segment.getSize() + amount);
+    }
+
+    //Assumes all segment sizes are non-negative and their total is greater than 0
+    public WheelSegment getLandedSegment(double finalRotation) {
+        if (segments.isEmpty()) return null;
+        /* Based on a fixed pointer at 0 deg, calculates angle based on the
+           landing spot of the spinning wheel angle(variable pointer starting at 0 deg)
+         */
+        double pointerAngle = (360 - (finalRotation % 360)) % 360;
+        //Determine how big the circle is
+        double totalSize = 0;
+        for (WheelSegment segment : segments) {
+            totalSize += segment.getSize();
+        }
+
+        double cumulativeAngle = 0;
+        //Checks what segment gets landed on
+        for (WheelSegment segment : segments) {
+            //cumulativeAngle is the high end of a segment's range
+            /*EX: If the first segment was a 1/4 of the circle, then
+            the first iteration of cumulativeAngle would be 90 deg
+             */
+            cumulativeAngle += 360 * (segment.getSize() / totalSize);
+            //if pointer falls between the segment's range return segment
+            if (pointerAngle < cumulativeAngle) {
+                return segment;
+            }
+        }
+
+        return segments.get(segments.size() - 1);
     }
 
     public void increaseMoneyMultiplier(double multiplier) {

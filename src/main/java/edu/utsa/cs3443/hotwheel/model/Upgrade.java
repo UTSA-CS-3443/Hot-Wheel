@@ -19,22 +19,26 @@ public class Upgrade {
         this.type = type;
     }
 
-    public void applyUpgrade(Wheel wheel) {
+    public void applyUpgrade(Wheel wheel, WheelSegment selectedSegment) {
         switch (type) {
             case SPIN_DURATION:
                 wheel.reduceSpinDuration(0.2 * level);
                 break;
+
             case MONEY_MULTIPLIER:
                 wheel.increaseMoneyMultiplier(1.1);
                 break;
+
             case SEGMENT_SIZE:
-                wheel.increaseGreatSegmentSize(5.0);
+                wheel.increaseSegmentSize(selectedSegment, 10.0);
                 break;
+
             case PAYOUT_BOOST:
                 wheel.increasePayouts(10.0 * level);
                 break;
         }
     }
+
 
     public void increaseLevel() {
         this.level++;
