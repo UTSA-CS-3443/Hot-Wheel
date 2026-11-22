@@ -10,10 +10,10 @@ public class Challenge {
     private double remainingMoney;
 
     public Challenge(double defaultValue, double challengeMultiplier, double challengeLevel) {
-        updateTargetMoney();
         this.defaultValue = defaultValue;
         this.challengeMultiplier = challengeMultiplier;
         this.challengeLevel = challengeLevel;
+        updateTargetMoney();
     }
 
     public void updateTargetMoney() {
