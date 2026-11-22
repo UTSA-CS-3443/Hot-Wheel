@@ -4,35 +4,38 @@ import edu.utsa.cs3443.hotwheel.manager.GameState;
 
 public class Challenge {
     private double targetMoney;
-    private double startingMoney;
-    private boolean success;
+    private double defaultValue;
+    private double challengeMultiplier;
+    private double challengeLevel;
+    private double remainingMoney;
 
-    public Challenge(double targetMoney, double startingMoney) {
-        this.targetMoney = targetMoney;
-        this.startingMoney = startingMoney;
-        this.success = false;
+    public Challenge(double defaultValue, double challengeMultiplier, double challengeLevel) {
+        this.defaultValue = defaultValue;
+        this.challengeMultiplier = challengeMultiplier;
+        this.challengeLevel = challengeLevel;
+        updateTargetMoney();
     }
 
-    public void startChallenge(GameState gameState) {
-        gameState.setMoney(startingMoney);
-        this.success = false;
+    public void updateTargetMoney() {
+        targetMoney = Math.round((defaultValue + challengeMultiplier * Math.pow(challengeLevel - 1, 1.2)) / 50.0) * 50.0;    
     }
-
-    public void updateTargetMoney(double newTarget) {
-        this.targetMoney = newTarget;
-    }
-
-    public boolean checkCompletion(GameState gameState) {
-        if (gameState.getMoney() >= targetMoney) {
-            this.success = true;
-            gameState.addPrestigePoint();
-            return true;
-        }
-        return false;
+    public int checkCompletion(double amount) {
+        int wins = 0;
+            while(amount >= targetMoney)
+            {
+                amount -= targetMoney;
+                challengeLevel++;
+                updateTargetMoney();
+                wins++;
+            }
+        remainingMoney = amount;
+        return wins;
     }
 
     // Getters and Setters
     public double getTargetMoney() { return targetMoney; }
-    public double getStartingMoney() { return startingMoney; }
-    public boolean isSuccess() { return success; }
+    public double getDefaultValue() { return defaultValue; }
+    public double getChallengeMultiplier() { return challengeMultiplier; }
+    public double getChallengeLevel() { return challengeLevel; }
+    public double getRemainingMoney() { return remainingMoney; }
 }
