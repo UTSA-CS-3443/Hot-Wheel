@@ -7,6 +7,7 @@ import edu.utsa.cs3443.hotwheel.manager.SceneManager;
 import edu.utsa.cs3443.hotwheel.model.Challenge;
 import edu.utsa.cs3443.hotwheel.model.Wheel;
 import edu.utsa.cs3443.hotwheel.model.WheelSegment;
+import edu.utsa.cs3443.hotwheel.model.Upgrade;
 import javafx.animation.KeyFrame;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
@@ -94,11 +95,18 @@ public class GameController {
                     actionFeedLabel.setText("Purchased an upgrade!");
                 }
             });
+            shopPaneController.applySavedLevels(saveFileManager.getLoadedUpgradeLevels());
         }
 
+        saveCurrentProgress();
         drawVisualWheel(currentSegments);
         updateUI();
-        startRunTimer();
+
+        if (gameManager.isRunning()) {
+            startRunTimer();
+        } else if (actionFeedLabel != null) {
+            actionFeedLabel.setText("Run Ended! Time is up.");
+        }
     }
 
     private void drawVisualWheel(List<WheelSegment> segments) {
@@ -229,7 +237,7 @@ public class GameController {
                                 landed.getValue(),
                                 earned
                         ));
-                }
+                    }
                 }
                 wheelSpinning.set(false);
                 runActive.set(gameManager.isRunning());
@@ -252,7 +260,8 @@ public class GameController {
 
     private void saveCurrentProgress() {
         if (gameManager != null && saveFileManager != null) {
-            saveFileManager.saveGame(currentSlot, gameManager.getGameState());
+            List<Upgrade> upgrades = (shopPaneController != null) ? shopPaneController.getUpgrades() : null;
+            saveFileManager.saveGame(currentSlot, gameManager.getGameState(), upgrades);
         }
     }
 

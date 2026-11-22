@@ -19,6 +19,7 @@ public class GameState {
         this.prestigePoints = 0;
         this.timeRemaining = timeRemaining;
     }
+
     public GameState(String activeSaveFile, Wheel wheel, double startingMoney, double timeRemaining, Challenge challenge) {
         this.activeSaveFile = activeSaveFile;
         this.wheel = wheel;
@@ -31,15 +32,17 @@ public class GameState {
     public void addMoney(double amount) {
         this.money += amount;
         revenue += amount;
-        if(amount >= 0 && challenge != null)
-        {
+        if (amount >= 0 && challenge != null) {
             int wins = challenge.checkCompletion(revenue);
-            if(wins > 0)
-            {
+            if (wins > 0) {
                 addPrestigePoint(wins);
                 revenue = challenge.getRemainingMoney();
             }
         }
+    }
+
+    public void resetRunRevenue() {
+        this.revenue = 0.0;
     }
 
     public void addPrestigePoint(int amount) {
